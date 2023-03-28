@@ -50,10 +50,10 @@ fetch(geo_url, {
                           }
                           var date = dayjs(response.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
                           $(`#date-${index}`).text(date);
-                          $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png");
-                          $(`#city-temp-${index}`).text("Temp: " + response.main.temp + "\u00B0F");
-                          $(`#city-wind-${index}`).text("Wind: " + response.wind.speed + "MPH");
-                          $(`#city-humidity-${index}`).text("Humidity: " + response.main.humidity + "%");
+                          $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response.list[calc_index].weather[0].icon + "@2x.png");
+                          $(`#city-temp-${index}`).text("Temp: " + response.list[calc_index].main.temp + "\u00B0F");
+                          $(`#city-wind-${index}`).text("Wind: " + response.list[calc_index].wind.speed + "MPH");
+                          $(`#city-humidity-${index}`).text("Humidity: " + response.list[calc_index].main.humidity + "%");
                           
                         }
                     })
