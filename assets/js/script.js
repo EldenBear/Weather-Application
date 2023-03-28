@@ -1,3 +1,4 @@
+var MY_KEY = "88552a6d230aa73267d2952b9f5b8583";
 var key = MY_KEY;
 
 // load local storage when the page loads
