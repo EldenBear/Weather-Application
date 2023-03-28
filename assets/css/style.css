@@ -1,5 +1,7 @@
+/*Adds font from Google Fonts and makes text white for page*/
 *{
     font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
 }
 
 #body{
@@ -20,7 +22,7 @@
 #search-col{
     text-align: left;
 }
-
+/*Style for current day in the city*/
 #city-row{
     border: 5px;
     border-color: #ffffff;
@@ -28,7 +30,7 @@
     background: linear-gradient(45deg, black, transparent);
     color: #ffffff;
 }
-
+/*Style for 5-day forecast*/
 .forecast{
     border: 3px;
     border-color: #ffffff;
@@ -36,11 +38,11 @@
     background: linear-gradient(45deg, black, transparent);
     color: #ffffff;
 }
-
+/*local storage buttons*/
 #local-search{
     display: grid;
 }
-
+/*icon from API*/
 #temp-icon {
     width: 250px;
     margin: auto;
@@ -49,7 +51,7 @@
 #page {
     margin: 0px;
 }
-
+/*Button styling*/
 #search-button{
     background: linear-gradient(45deg, #000000,transparent);
     color: #ffffff;
