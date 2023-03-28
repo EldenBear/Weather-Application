@@ -1,4 +1,4 @@
-var key = config.MY_KEY;
+var key = MY_KEY;
 
 // load local storage when the page loads
 $( document ).ready(function() {
