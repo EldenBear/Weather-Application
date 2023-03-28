@@ -1,133 +1,143 @@
 var key = config.MY_KEY;
 
+// load local storage when the page loads
 $( document ).ready(function() {
   const previousCities = JSON.parse(localStorage.getItem("cities"));
-  if (previousCities !==null) {
+  if (previousCities !== null) {
+    // for each previous city in local storage, create a button for it and append it to the "local-search" div
     for (let index = 0; index < previousCities.length; index++) {
       const element = previousCities[index];
       var button = $(`<button>${element.city_name}</button>`);
-                        button.click(function(){
-                          retreiveCurrentWeather(element.latitude, element.longitude);
-                          var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${element.latitude}&lon=${element.longitude}&appid=${key}&units=imperial`;
-                          fetch(url, {
-                            method: 'GET', //GET is the default.
-                            })
-                            .then(function (response) {
-                                return response.json();
-                            })
-                            .then(function (response) {
-                                    for (let j = 1; j < 6; j++) {
-                                      var calc_index = ((j-1) * 8)-1;
-                                      if (calc_index < 0) {
-                                        calc_index = 0;
-                                      }
-                                      var date = dayjs(response.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
-                                      $(`#date-${j}`).text(date);
-                                      $(`#temp-icon-${j}`).attr('src', "https://openweathermap.org/img/wn/" + response.list[calc_index].weather[0].icon + "@2x.png");
-                                      $(`#city-temp-${j}`).text("Temp: " + response.list[calc_index].main.temp + "\u00B0F");
-                                      $(`#city-wind-${j}`).text("Wind: " + response.list[calc_index].wind.speed + "MPH");
-                                      $(`#city-humidity-${j}`).text("Humidity: " + response.list[calc_index].main.humidity + "%");
-                                      
-                                    }
-                                });
-                        });
-                        $( "#local-search" ).append(button);
+      button.click(function() {
+        retreiveCurrentWeather(element.latitude, element.longitude);
+        var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${element.latitude}&lon=${element.longitude}&appid=${key}&units=imperial`;
+        fetch(url, {
+          method: 'GET',
+        })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (response) {
+          for (let j = 1; j < 6; j++) {
+            // calculate the index for the weather on the next day based on the current time and the number of hours until the next day
+            var calc_index = ((j-1) * 8)-1;
+            if (calc_index < 0) {
+              calc_index = 0;
+            }
+            var date = dayjs(response.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
+            $(`#date-${j}`).text(date);
+            $(`#temp-icon-${j}`).attr('src', "https://openweathermap.org/img/wn/" + response.list[calc_index].weather[0].icon + "@2x.png");
+            $(`#city-temp-${j}`).text("Temp: " + response.list[calc_index].main.temp + "\u00B0F");
+            $(`#city-wind-${j}`).text("Wind: " + response.list[calc_index].wind.speed + "MPH");
+            $(`#city-humidity-${j}`).text("Humidity: " + response.list[calc_index].main.humidity + "%"); 
+          }
+        });
+      });
+      
+      // append the newly created button
+      $( "#local-search" ).append(button);
     }
     }
 });
 
+// click functionality for the search button
 $("#search-button").click(function(){
-    var txt_field = $('#input_text').val(); 
-    var geo_url = `http://api.openweathermap.org/geo/1.0/direct?q=${txt_field}&limit=5&appid=${key}`;
-    var latitude = 0.0;
-    var longitude = 0.0;
+  // get user input
+  var txt_field = $('#input_text').val(); 
+  
+  // URL to get the latitude and longitude 
+  var geo_url = `http://api.openweathermap.org/geo/1.0/direct?q=${txt_field}&limit=5&appid=${key}`;
+  var latitude = 0.0;
+  var longitude = 0.0;
 
-fetch(geo_url, {
-  method: 'GET', //GET is the default.
-})
+  fetch(geo_url, {
+    method: 'GET',
+  })
   .then(function (response) {
     return response.json();
-})
-.then(function (response) {
-        console.log(response);
-        if (response.length > 0) {
-            latitude = response[0].lat;
-            longitude = response[0].lon;
-           
-            var current_url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
-            fetch(current_url, {
-                method: 'GET', //GET is the default.
-                })
-                .then(function (response2) {
-                    return response2.json();
-                })
-                .then(function (response2) {
-                  console.log(response2);
-                  var date = dayjs().format('M/D/YYYY');
-                        $('#city-name').text(response2.name + " " + date);
-                        $('#temp-icon').attr('src', "https://openweathermap.org/img/wn/" + response2.weather[0].icon + "@2x.png");
-                        $('#city-temp').text("Temp: " + response2.main.temp + "\u00B0F");
-                        $('#city-wind').text("Wind: " + response2.wind.speed + "MPH");
-                        $('#city-humidity').text("Humidity: " + response2.main.humidity + "%");
-                        var button = $(`<button>${response2.name}</button>`);
-                        button.click(function(){
-                          retreiveCurrentWeather(latitude, longitude);
-                          var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
-                          fetch(url, {
-                            method: 'GET', //GET is the default.
-                            })
-                            .then(function (response3) {
-                                return response3.json();
-                            })
-                            .then(function (response3) {
-                              console.log(response3);
-                                    for (let index = 1; index < 6; index++) {
-                                      var calc_index = ((index-1) * 8)-1;
-                                      if (calc_index < 0) {
-                                        calc_index = 0;
-                                      }
-                                      var date = dayjs(response3.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
-                                      $(`#date-${index}`).text(date);
-                                      $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response3.list[calc_index].weather[0].icon + "@2x.png");
-                                      $(`#city-temp-${index}`).text("Temp: " + response3.list[calc_index].main.temp + "\u00B0F");
-                                      $(`#city-wind-${index}`).text("Wind: " + response3.list[calc_index].wind.speed + "MPH");
-                                      $(`#city-humidity-${index}`).text("Humidity: " + response3.list[calc_index].main.humidity + "%");
-                                      
-                                    }
-                                });
-                        });
-                        $( "#local-search" ).append(button);
-                        addToLocalStorage(latitude, longitude, response2.name);
-                    });
-
-            var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
-            fetch(url, {
-                method: 'GET', //GET is the default.
-                })
-                .then(function (response2) {
-                    return response2.json();
-                })
-                .then(function (response2) {
-                  console.log(response2);
-                        for (let index = 1; index < 6; index++) {
-                          var calc_index = ((index-1) * 8)-1;
-                          if (calc_index < 0) {
-                            calc_index = 0;
-                          }
-                          var date = dayjs(response2.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
-                          $(`#date-${index}`).text(date);
-                          $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response2.list[calc_index].weather[0].icon + "@2x.png");
-                          $(`#city-temp-${index}`).text("Temp: " + response2.list[calc_index].main.temp + "\u00B0F");
-                          $(`#city-wind-${index}`).text("Wind: " + response2.list[calc_index].wind.speed + "MPH");
-                          $(`#city-humidity-${index}`).text("Humidity: " + response2.list[calc_index].main.humidity + "%");
-                          
-                        }
-                    })
-        }
+  })
+  .then(function (response) {
+    // if we get a valid response, take the latitude and longitude from the first city listed
+    if (response.length > 0) {
+      latitude = response[0].lat;
+      longitude = response[0].lon;
+      
+      // fetch data for the current day's weather
+      var current_url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+      fetch(current_url, {
+        method: 'GET',
+      })
+      .then(function (response2) {
+        return response2.json();
+      })
+      .then(function (response2) {
+        // display the current weather for the city
+        var date = dayjs().format('M/D/YYYY');
+        $('#city-name').text(response2.name + " " + date);
+        $('#temp-icon').attr('src', "https://openweathermap.org/img/wn/" + response2.weather[0].icon + "@2x.png");
+        $('#city-temp').text("Temp: " + response2.main.temp + "\u00B0F");
+        $('#city-wind').text("Wind: " + response2.wind.speed + "MPH");
+        $('#city-humidity').text("Humidity: " + response2.main.humidity + "%");
         
-    })
-  }
-  );
+        // add new button to the city search history
+        var button = $(`<button>${response2.name}</button>`);
+        button.click(function(){
+          retreiveCurrentWeather(latitude, longitude);
+          var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+          fetch(url, {
+            method: 'GET',
+          })
+          .then(function (response3) {
+            return response3.json();
+          })
+          .then(function (response3) {
+            for (let index = 1; index < 6; index++) {
+              var calc_index = ((index-1) * 8)-1;
+              if (calc_index < 0) {
+                calc_index = 0;
+              }
+              var date = dayjs(response3.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
+              $(`#date-${index}`).text(date);
+              $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response3.list[calc_index].weather[0].icon + "@2x.png");
+              $(`#city-temp-${index}`).text("Temp: " + response3.list[calc_index].main.temp + "\u00B0F");
+              $(`#city-wind-${index}`).text("Wind: " + response3.list[calc_index].wind.speed + "MPH");
+              $(`#city-humidity-${index}`).text("Humidity: " + response3.list[calc_index].main.humidity + "%");
+            }
+          });
+        });
+        $( "#local-search" ).append(button);
+
+        // write search history to local storage
+        addToLocalStorage(latitude, longitude, response2.name);
+      });
+
+      // fetch data for the weather over the next 5 days
+      var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+      fetch(url, {
+        method: 'GET',
+      })
+      .then(function (response2) {
+        return response2.json();
+      })
+      .then(function (response2) {
+        // display the weather for the next 5 days
+        for (let index = 1; index < 6; index++) {
+          // calculate the index based off of the number of hours per day
+          var calc_index = ((index-1) * 8)-1;
+          if (calc_index < 0) {
+            calc_index = 0;
+          }
+          var date = dayjs(response2.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
+          $(`#date-${index}`).text(date);
+          $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response2.list[calc_index].weather[0].icon + "@2x.png");
+          $(`#city-temp-${index}`).text("Temp: " + response2.list[calc_index].main.temp + "\u00B0F");
+          $(`#city-wind-${index}`).text("Wind: " + response2.list[calc_index].wind.speed + "MPH");
+          $(`#city-humidity-${index}`).text("Humidity: " + response2.list[calc_index].main.humidity + "%");
+        }
+      });
+    }
+  })
+});
 
 // retrieve the current weather at the location
 function retreiveCurrentWeather(latitude, longitude) {
