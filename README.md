@@ -10,7 +10,7 @@ It uses the openweathermap API to get the information to the user.
 Screenshot of app:
 
 
-![alt text](assets/images/screenshot.png)
+![app screenshot](assets/images/Weather-App-SS.png)
 
 
 ## Credits
