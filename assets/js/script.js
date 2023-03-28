@@ -11,7 +11,7 @@ $( document ).ready(function() {
       var button = $(`<button class="stored-cities">${element.city_name}</button>`);
       button.click(function() {
         retreiveCurrentWeather(element.latitude, element.longitude);
-        var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${element.latitude}&lon=${element.longitude}&appid=${key}&units=imperial`;
+        var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${element.latitude}&lon=${element.longitude}&appid=${key}&units=imperial`;
         fetch(url, {
           method: 'GET',
         })
@@ -48,7 +48,7 @@ $("#search-button").click(function(){
   var txt_field = $('#input_text').val(); 
   
   // URL to get the latitude and longitude 
-  var geo_url = `http://api.openweathermap.org/geo/1.0/direct?q=${txt_field}&limit=5&appid=${key}`;
+  var geo_url = `https://api.openweathermap.org/geo/1.0/direct?q=${txt_field}&limit=5&appid=${key}`;
   var latitude = 0.0;
   var longitude = 0.0;
 
@@ -65,7 +65,7 @@ $("#search-button").click(function(){
       longitude = response[0].lon;
       
       // fetch data for the current day's weather
-      var current_url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+      var current_url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
       fetch(current_url, {
         method: 'GET',
       })
@@ -85,7 +85,7 @@ $("#search-button").click(function(){
         var button = $(`<button class="stored-cities">${response2.name}</button>`);
         button.click(function(){
           retreiveCurrentWeather(latitude, longitude);
-          var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+          var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
           fetch(url, {
             method: 'GET',
           })
@@ -116,7 +116,7 @@ $("#search-button").click(function(){
       });
 
       // fetch data for the weather over the next 5 days
-      var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+      var url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
       fetch(url, {
         method: 'GET',
       })
@@ -147,7 +147,7 @@ $("#search-button").click(function(){
 // retrieve the current weather at the location
 function retreiveCurrentWeather(latitude, longitude) {
   // URL for current weather
-  var current_url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
+  var current_url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
   fetch(current_url, {
     method: 'GET',
   })
