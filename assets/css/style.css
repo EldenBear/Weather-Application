@@ -1,8 +1,62 @@
+*{
+    font-family: 'Orbitron', sans-serif;
+}
+
+#body{
+    background: #696969;
+}
+
 #main-header{
     text-align: center;
-    background: linear-gradient(45deg, red, transparent);
+    background: linear-gradient(45deg, #000000, transparent);
+    font-size: 75px;
+    color: #ffffff;
+}
+
+#under-header{
+    margin-left: 0px;
 }
 
 #search-col{
     text-align: left;
+}
+
+#city-row{
+    border: 5px;
+    border-color: #ffffff;
+    border-style: solid;
+    background: linear-gradient(45deg, black, transparent);
+    color: #ffffff;
+}
+
+.forecast{
+    border: 3px;
+    border-color: #ffffff;
+    border-style: solid;
+    background: linear-gradient(45deg, black, transparent);
+    color: #ffffff;
+}
+
+#local-search{
+    display: grid;
+}
+
+#temp-icon {
+    width: 250px;
+    margin: auto;
+}
+
+#page {
+    margin: 0px;
+}
+
+#search-button{
+    background: linear-gradient(45deg, #000000,transparent);
+    color: #ffffff;
+}
+
+.stored-cities {
+    background: linear-gradient(45deg, #000000,transparent);
+    color: #ffffff;
+    width: 60%;
 }

@@ -7,7 +7,7 @@ $( document ).ready(function() {
     // for each previous city in local storage, create a button for it and append it to the "local-search" div
     for (let index = 0; index < previousCities.length; index++) {
       const element = previousCities[index];
-      var button = $(`<button>${element.city_name}</button>`);
+      var button = $(`<button class="stored-cities">${element.city_name}</button>`);
       button.click(function() {
         retreiveCurrentWeather(element.latitude, element.longitude);
         var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${element.latitude}&lon=${element.longitude}&appid=${key}&units=imperial`;
@@ -81,7 +81,7 @@ $("#search-button").click(function(){
         $('#city-humidity').text("Humidity: " + response2.main.humidity + "%");
         
         // add new button to the city search history
-        var button = $(`<button>${response2.name}</button>`);
+        var button = $(`<button class="stored-cities">${response2.name}</button>`);
         button.click(function(){
           retreiveCurrentWeather(latitude, longitude);
           var url = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=imperial`;
