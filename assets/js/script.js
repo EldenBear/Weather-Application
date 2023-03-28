@@ -19,17 +19,18 @@ $( document ).ready(function() {
         })
         .then(function (response) {
           for (let j = 1; j < 6; j++) {
-            // calculate the index for the weather on the next day based on the current time and the number of hours until the next day
-            var calc_index = ((j-1) * 8)-1;
-            if (calc_index < 0) {
-              calc_index = 0;
-            }
-            var date = dayjs(response.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
+            var date = dayjs().add(j, 'day');
+            var dateString = date.format('YYYY-MM-DD');
+            var matchingDates = response.list.filter(x=>
+              x.dt_txt.includes(dateString)
+            );
+            var matchingDate = matchingDates[0];
+            var date = dayjs(matchingDate.dt_txt.split(" ")[0]).format('M/D/YYYY');
             $(`#date-${j}`).text(date);
-            $(`#temp-icon-${j}`).attr('src', "https://openweathermap.org/img/wn/" + response.list[calc_index].weather[0].icon + "@2x.png");
-            $(`#city-temp-${j}`).text("Temp: " + response.list[calc_index].main.temp + "\u00B0F");
-            $(`#city-wind-${j}`).text("Wind: " + response.list[calc_index].wind.speed + "MPH");
-            $(`#city-humidity-${j}`).text("Humidity: " + response.list[calc_index].main.humidity + "%"); 
+            $(`#temp-icon-${j}`).attr('src', "https://openweathermap.org/img/wn/" + matchingDate.weather[0].icon + "@2x.png");
+            $(`#city-temp-${j}`).text("Temp: " + matchingDate.main.temp + "\u00B0F");
+            $(`#city-wind-${j}`).text("Wind: " + matchingDate.wind.speed + "MPH");
+            $(`#city-humidity-${j}`).text("Humidity: " + matchingDate.main.humidity + "%"); 
           }
         });
       });
@@ -92,16 +93,18 @@ $("#search-button").click(function(){
           })
           .then(function (response3) {
             for (let index = 1; index < 6; index++) {
-              var calc_index = ((index-1) * 8)-1;
-              if (calc_index < 0) {
-                calc_index = 0;
-              }
-              var date = dayjs(response3.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
+              var date = dayjs().add(index, 'day');
+              var dateString = date.format('YYYY-MM-DD');
+              var matchingDates = response2.list.filter(x=>
+                x.dt_txt.includes(dateString)
+              );
+              var matchingDate = matchingDates[0];
+              var date = dayjs(matchingDate.dt_txt.split(" ")[0]).format('M/D/YYYY');
               $(`#date-${index}`).text(date);
-              $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response3.list[calc_index].weather[0].icon + "@2x.png");
-              $(`#city-temp-${index}`).text("Temp: " + response3.list[calc_index].main.temp + "\u00B0F");
-              $(`#city-wind-${index}`).text("Wind: " + response3.list[calc_index].wind.speed + "MPH");
-              $(`#city-humidity-${index}`).text("Humidity: " + response3.list[calc_index].main.humidity + "%");
+              $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + matchingDate.weather[0].icon + "@2x.png");
+              $(`#city-temp-${index}`).text("Temp: " + matchingDate.main.temp + "\u00B0F");
+              $(`#city-wind-${index}`).text("Wind: " + matchingDate.wind.speed + "MPH");
+              $(`#city-humidity-${index}`).text("Humidity: " + matchingDate.main.humidity + "%");
             }
           });
         });
@@ -122,17 +125,18 @@ $("#search-button").click(function(){
       .then(function (response2) {
         // display the weather for the next 5 days
         for (let index = 1; index < 6; index++) {
-          // calculate the index based off of the number of hours per day
-          var calc_index = ((index-1) * 8)-1;
-          if (calc_index < 0) {
-            calc_index = 0;
-          }
-          var date = dayjs(response2.list[calc_index].dt_txt.split(" ")[0]).format('M/D/YYYY');
+          var date = dayjs().add(index, 'day');
+          var dateString = date.format('YYYY-MM-DD');
+          var matchingDates = response2.list.filter(x=>
+            x.dt_txt.includes(dateString)
+          );
+          var matchingDate = matchingDates[0];
+          var date = dayjs(matchingDate.dt_txt.split(" ")[0]).format('M/D/YYYY');
           $(`#date-${index}`).text(date);
-          $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + response2.list[calc_index].weather[0].icon + "@2x.png");
-          $(`#city-temp-${index}`).text("Temp: " + response2.list[calc_index].main.temp + "\u00B0F");
-          $(`#city-wind-${index}`).text("Wind: " + response2.list[calc_index].wind.speed + "MPH");
-          $(`#city-humidity-${index}`).text("Humidity: " + response2.list[calc_index].main.humidity + "%");
+          $(`#temp-icon-${index}`).attr('src', "https://openweathermap.org/img/wn/" + matchingDate.weather[0].icon + "@2x.png");
+          $(`#city-temp-${index}`).text("Temp: " + matchingDate.main.temp + "\u00B0F");
+          $(`#city-wind-${index}`).text("Wind: " + matchingDate.wind.speed + "MPH");
+          $(`#city-humidity-${index}`).text("Humidity: " + matchingDate.main.humidity + "%");
         }
       });
     }
